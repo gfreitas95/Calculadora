@@ -20,14 +20,15 @@ enum Operation: String {
 class CalculatorViewController: UIViewController {
     
     let defaults = UserDefaults.standard
+    let backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
     
-    @IBOutlet var txtName: UITextField?
-    @IBOutlet var lblCount: UILabel?
-    
-    @IBOutlet var btnAdd: UIButton?
-    @IBOutlet var btnSubtract: UIButton?
-    @IBOutlet var btnDivide: UIButton?
-    @IBOutlet var btnMultiply: UIButton?
+    @IBOutlet weak var txtName: UITextField!
+    @IBOutlet weak var lblCount: UILabel!
+    @IBOutlet weak var btnAdd: UIButton!
+    @IBOutlet weak var btnSubtract: UIButton!
+    @IBOutlet weak var btnDivide: UIButton!
+    @IBOutlet weak var btnMultiply: UIButton!
+    @IBOutlet weak var btnEquals: UIButton!
     
     var runningNumber = ""
     var leftValue = ""
@@ -38,201 +39,11 @@ class CalculatorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        lblCount?.text = "0"
+        lblCount?.text = result
         
         if let placeholder = txtName?.placeholder {
             txtName?.attributedPlaceholder = NSAttributedString(string: placeholder,
                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.4)])
-        }
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-    }
-    
-    //-----------------------------------------------------------------------
-    //    MARK: Custom methods
-    //-----------------------------------------------------------------------
-    
-    @IBAction func saveCount() {
-        
-        let savedVC = storyboard?.instantiateViewController(identifier: "SavesView") as! SavesViewController
-        
-        let dic = ["name": txtName?.text ?? "",
-                   "result": lblCount?.text ?? ""]
-        
-        if var numbersDictionary = UserDefaults.standard.value(forKey: "results") as? Array<Dictionary<String,String>> {
-            
-            numbersDictionary.append(dic)
-            UserDefaults.standard.set(numbersDictionary, forKey: "results")
-            UserDefaults.standard.synchronize()
-        } else {
-            UserDefaults.standard.set([dic], forKey: "results")
-        }
-        txtName?.text = ""
-        self.present(savedVC, animated: true, completion: nil)
-    }
-    
-    @IBAction func goToSavedCounts() {
-        
-        let savedVC = storyboard?.instantiateViewController(identifier: "SavesView") as! SavesViewController
-        
-        self.present(savedVC, animated: true, completion: nil)
-    }
-    
-    @IBAction func numberPressed(_ sender: UIButton) {
-        
-        if runningNumber.count <= 8 {
-            runningNumber += "\(sender.tag)"
-            lblCount?.text = runningNumber
-            buttonsPressed()
-        }
-    }
-    
-    @IBAction func allClearPressed(_ sender: UIButton) {
-        
-        runningNumber = ""
-        leftValue = ""
-        rightValue = ""
-        result = ""
-        currentOperation = .Null
-        lblCount?.text = "0"
-    }
-    
-    @IBAction func dotPressed(_ sender: UIButton) {
-        
-        if runningNumber.count <= 7 {
-        runningNumber += "."
-        lblCount?.text = runningNumber
-        }
-    }
-    
-    @IBAction func equalPressed(_ sender: UIButton) {
-        operation(operation: currentOperation)
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnAdd?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnDivide?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnMultiply?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnSubtract?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-    }
-    
-    @IBAction func addPressed(_ sender: UIButton) {
-        
-        btnAdd?.backgroundColor = UIColor.white
-        btnAdd?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
-        operation(operation: .Add)
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnDivide?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnMultiply?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnSubtract?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-    }
-    
-    @IBAction func subtractPressed(_ sender: UIButton) {
-        operation(operation: .Subtract)
-        
-        btnSubtract?.backgroundColor = UIColor.white
-        btnSubtract?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnAdd?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnDivide?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnMultiply?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-    }
-    
-    @IBAction func multiplyPressed(_ sender: UIButton) {
-        operation(operation: .Multiply)
-        
-        btnMultiply?.backgroundColor = UIColor.white
-        btnMultiply?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnAdd?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnDivide?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnSubtract?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-    }
-    
-    @IBAction func dividePressed(_ sender: UIButton) {
-        operation(operation: .Divide)
-        
-        btnDivide?.backgroundColor = UIColor.white
-        btnDivide?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnAdd?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnMultiply?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnSubtract?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-            self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
         }
     }
     
@@ -261,7 +72,6 @@ class CalculatorViewController: UIViewController {
                 lblCount?.text = result
             }
             currentOperation = operation
-            
         } else {
             leftValue = runningNumber
             runningNumber = ""
@@ -272,23 +82,218 @@ class CalculatorViewController: UIViewController {
     func buttonsPressed() {
         
         UIView.animate(withDuration: 0.5) {
-            self.btnAdd?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
+            self.btnAdd?.backgroundColor = self.backgroundColor
             self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
         }
-        
         UIView.animate(withDuration: 0.5) {
-            self.btnDivide?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
+            self.btnDivide?.backgroundColor = self.backgroundColor
             self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
         }
-        
         UIView.animate(withDuration: 0.5) {
-            self.btnMultiply?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
+            self.btnMultiply?.backgroundColor = self.backgroundColor
             self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
         }
+        UIView.animate(withDuration: 0.5) {
+            self.btnSubtract?.backgroundColor = self.backgroundColor
+            self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnEquals?.backgroundColor = self.backgroundColor
+            self.btnEquals?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+    }
+    
+    // MARK: - IBActions
+    
+    @IBAction func saveCount() {
+        
+        let savesViewController = storyboard?.instantiateViewController(identifier: "SavesView") as! SavesViewController
+        
+        let dictionary = ["name": txtName?.text ?? "", "result": lblCount?.text ?? ""]
+        
+        if var numbersDictionary = UserDefaults.standard.value(forKey: "results") as? Array<Dictionary<String,String>> {
+            
+            numbersDictionary.append(dictionary)
+            UserDefaults.standard.set(numbersDictionary, forKey: "results")
+            UserDefaults.standard.synchronize()
+        } else {
+            UserDefaults.standard.set([dictionary], forKey: "results")
+        }
+        txtName?.text = ""
+        self.present(savesViewController, animated: true, completion: nil)
+    }
+    
+    @IBAction func goToSavedCounts() {
+        
+        let savesViewController = storyboard?.instantiateViewController(identifier: "SavesView") as! SavesViewController
+        
+        self.present(savesViewController, animated: true, completion: nil)
+    }
+    
+    @IBAction func numberPressed(_ sender: UIButton) {
+        
+        if runningNumber.count <= 9 {
+            runningNumber += "\(sender.tag)"
+            lblCount?.text = runningNumber
+            buttonsPressed()
+        }
+    }
+    
+    @IBAction func allClearPressed(_ sender: UIButton) {
+        
+        runningNumber = ""
+        leftValue = ""
+        rightValue = ""
+        result = ""
+        currentOperation = .Null
+        lblCount?.text = "0"
+    }
+    
+    @IBAction func dotPressed(_ sender: UIButton) {
+        
+        if runningNumber.count <= 9 {
+        runningNumber += "."
+        lblCount?.text = runningNumber
+        }
+    }
+    
+    @IBAction func equalPressed(_ sender: UIButton) {
+        operation(operation: currentOperation)
+        
+        btnEquals?.backgroundColor = UIColor.white
+        btnEquals?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
         
         UIView.animate(withDuration: 0.5) {
-            self.btnSubtract?.backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
+            self.btnAdd?.backgroundColor = self.backgroundColor
+            self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnDivide?.backgroundColor = self.backgroundColor
+            self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnMultiply?.backgroundColor = self.backgroundColor
+            self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnSubtract?.backgroundColor = self.backgroundColor
             self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnEquals?.backgroundColor = self.backgroundColor
+            self.btnEquals?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+    }
+    
+    @IBAction func addPressed(_ sender: UIButton) {
+        operation(operation: .Add)
+        
+        btnAdd?.backgroundColor = UIColor.white
+        btnAdd?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
+        
+        UIView.animate(withDuration: 0.5) {
+            self.btnAdd?.backgroundColor = self.backgroundColor
+            self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnDivide?.backgroundColor = self.backgroundColor
+            self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnMultiply?.backgroundColor = self.backgroundColor
+            self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnSubtract?.backgroundColor = self.backgroundColor
+            self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnEquals?.backgroundColor = self.backgroundColor
+            self.btnEquals?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+    }
+    
+    @IBAction func subtractPressed(_ sender: UIButton) {
+        operation(operation: .Subtract)
+        
+        btnSubtract?.backgroundColor = UIColor.white
+        btnSubtract?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
+        
+        UIView.animate(withDuration: 0.5) {
+            self.btnSubtract?.backgroundColor = self.backgroundColor
+            self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnAdd?.backgroundColor = self.backgroundColor
+            self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnDivide?.backgroundColor = self.backgroundColor
+            self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnMultiply?.backgroundColor = self.backgroundColor
+            self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnEquals?.backgroundColor = self.backgroundColor
+            self.btnEquals?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+    }
+    
+    @IBAction func multiplyPressed(_ sender: UIButton) {
+        operation(operation: .Multiply)
+        
+        btnMultiply?.backgroundColor = UIColor.white
+        btnMultiply?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
+        
+        UIView.animate(withDuration: 0.5) {
+            self.btnMultiply?.backgroundColor = self.backgroundColor
+            self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnAdd?.backgroundColor = self.backgroundColor
+            self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnDivide?.backgroundColor = self.backgroundColor
+            self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnSubtract?.backgroundColor = self.backgroundColor
+            self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnEquals?.backgroundColor = self.backgroundColor
+            self.btnEquals?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+    }
+    
+    @IBAction func dividePressed(_ sender: UIButton) {
+        operation(operation: .Divide)
+        
+        btnDivide?.backgroundColor = UIColor.white
+        btnDivide?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
+        
+        UIView.animate(withDuration: 0.5) {
+            self.btnDivide?.backgroundColor = self.backgroundColor
+            self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnAdd?.backgroundColor = self.backgroundColor
+            self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnMultiply?.backgroundColor = self.backgroundColor
+            self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnSubtract?.backgroundColor = self.backgroundColor
+            self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.btnEquals?.backgroundColor = self.backgroundColor
+            self.btnEquals?.setTitleColor(UIColor.white, for: UIControl.State.normal)
         }
     }
 }

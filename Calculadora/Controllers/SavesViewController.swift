@@ -11,46 +11,18 @@ import UIKit
 class SavesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     let defaults = UserDefaults.standard
-    
     var numbersSaved: Array<Result> = []
     
     @IBOutlet var tbResults: UITableView?
-    
-    //-----------------------------------------------------------------------
-    //    MARK: UIViewController
-    //-----------------------------------------------------------------------
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         numbersSaved = get()
-        
         tbResults?.reloadData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-    }
-    
-    //-----------------------------------------------------------------------
-    //    MARK: UITableView Delegate / Datasource
-    //-----------------------------------------------------------------------
+   // MARK: - TableViewController
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return numbersSaved.count
@@ -85,10 +57,6 @@ class SavesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tbResults?.reloadData()
     }
     
-    //-----------------------------------------------------------------------
-    //    MARK: Custom methods
-    //-----------------------------------------------------------------------
-    
     func get() -> Array<Result> {
         
         var list: Array<Result> = []
@@ -97,8 +65,7 @@ class SavesViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             for item in results {
                 
-                let object = Result(name: item["name"] ?? "",
-                                    result: item["result"] ?? "")
+                let object = Result(name: item["name"] ?? "", result: item["result"] ?? "")
                 list.append(object)
             }
         }
@@ -106,8 +73,6 @@ class SavesViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func backButton() {
-        
         self.dismiss(animated: true, completion: nil)
     }
-    
 }
