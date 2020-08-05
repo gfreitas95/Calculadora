@@ -10,11 +10,14 @@ import UIKit
 
 enum Operation: String {
     
-    case Add = "+"
-    case Subtract = "-"
-    case Divide = "/"
-    case Multiply = "*"
-    case Null = "Null"
+    case add = "+"
+    case subtract = "−"
+    case divide = "÷"
+    case multiply = "*"
+    case null = "Null"
+    case percent = "%"
+    case plusMinus = "⁺/-"
+    case AC = "C"
 }
 
 class CalculatorViewController: UIViewController {
@@ -29,12 +32,14 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var btnDivide: UIButton!
     @IBOutlet weak var btnMultiply: UIButton!
     @IBOutlet weak var btnEquals: UIButton!
+    @IBOutlet weak var btnPercent: UIButton!
+    @IBOutlet weak var btnPlusMinus: UIButton!
     
     var runningNumber = ""
     var leftValue = ""
     var rightValue = ""
     var result = ""
-    var currentOperation:Operation =  .Null
+    var currentOperation:Operation =  .null
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,21 +54,22 @@ class CalculatorViewController: UIViewController {
     
     func operation(operation: Operation) {
         
-        if currentOperation != .Null {
+        if currentOperation != .null {
             
             if runningNumber != "" {
                 rightValue = runningNumber
                 runningNumber = ""
                 
-                if currentOperation == .Add {
+                if currentOperation == .add {
                     result = "\(Double(leftValue)! + Double(rightValue)!)"
-                } else if currentOperation == .Subtract {
+                } else if currentOperation == .subtract {
                     result = "\(Double(leftValue)! - Double(rightValue)!)"
-                } else if currentOperation == .Multiply {
+                } else if currentOperation == .multiply {
                     result = "\(Double(leftValue)! * Double(rightValue)!)"
-                } else if currentOperation == .Divide {
+                } else if currentOperation == .divide {
                     result = "\(Double(leftValue)! / Double(rightValue)!)"
                 }
+                    
                 leftValue = result
                 
                 if (Double(result)!.truncatingRemainder(dividingBy: 1) == 0) {
@@ -145,7 +151,7 @@ class CalculatorViewController: UIViewController {
         leftValue = ""
         rightValue = ""
         result = ""
-        currentOperation = .Null
+        currentOperation = .null
         lblCount?.text = "0"
     }
     
@@ -186,15 +192,11 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func addPressed(_ sender: UIButton) {
-        operation(operation: .Add)
+        operation(operation: .add)
         
         btnAdd?.backgroundColor = UIColor.white
         btnAdd?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
         
-        UIView.animate(withDuration: 0.5) {
-            self.btnAdd?.backgroundColor = self.backgroundColor
-            self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
         UIView.animate(withDuration: 0.5) {
             self.btnDivide?.backgroundColor = self.backgroundColor
             self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
@@ -214,15 +216,11 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func subtractPressed(_ sender: UIButton) {
-        operation(operation: .Subtract)
+        operation(operation: .subtract)
         
         btnSubtract?.backgroundColor = UIColor.white
         btnSubtract?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
-        
-        UIView.animate(withDuration: 0.5) {
-            self.btnSubtract?.backgroundColor = self.backgroundColor
-            self.btnSubtract?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
+               
         UIView.animate(withDuration: 0.5) {
             self.btnAdd?.backgroundColor = self.backgroundColor
             self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
@@ -242,15 +240,11 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func multiplyPressed(_ sender: UIButton) {
-        operation(operation: .Multiply)
+        operation(operation: .multiply)
         
         btnMultiply?.backgroundColor = UIColor.white
         btnMultiply?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
         
-        UIView.animate(withDuration: 0.5) {
-            self.btnMultiply?.backgroundColor = self.backgroundColor
-            self.btnMultiply?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
         UIView.animate(withDuration: 0.5) {
             self.btnAdd?.backgroundColor = self.backgroundColor
             self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
@@ -270,15 +264,11 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func dividePressed(_ sender: UIButton) {
-        operation(operation: .Divide)
+        operation(operation: .divide)
         
         btnDivide?.backgroundColor = UIColor.white
         btnDivide?.setTitleColor(UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0), for: UIControl.State.normal)
         
-        UIView.animate(withDuration: 0.5) {
-            self.btnDivide?.backgroundColor = self.backgroundColor
-            self.btnDivide?.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        }
         UIView.animate(withDuration: 0.5) {
             self.btnAdd?.backgroundColor = self.backgroundColor
             self.btnAdd?.setTitleColor(UIColor.white, for: UIControl.State.normal)
