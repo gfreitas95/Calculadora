@@ -15,7 +15,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gl5-SX-lpj">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="gl5-SX-lpj">
                                 <rect key="frame" x="32" y="189" width="350" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="JWM-n2-orN"/>
@@ -98,6 +98,9 @@
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="40"/>
                                                         </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="plusMinusPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BTO-AM-M5W"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Pc-xv-b9i">
                                                         <rect key="frame" x="180" y="0.0" width="80" height="80"/>
@@ -113,6 +116,9 @@
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="40"/>
                                                         </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="percentPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4w2-gu-VqZ"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IFI-9Y-Y67">
                                                         <rect key="frame" x="270" y="0.0" width="80" height="80"/>
@@ -468,6 +474,7 @@
                     </view>
                     <connections>
                         <outlet property="btnAdd" destination="nre-cm-Rfb" id="7ne-EQ-H0M"/>
+                        <outlet property="btnAllClear" destination="mlI-8j-jBa" id="ZL3-FN-413"/>
                         <outlet property="btnDivide" destination="IFI-9Y-Y67" id="0wG-uk-Da6"/>
                         <outlet property="btnEquals" destination="FW8-u3-uUS" id="mwh-eA-Exm"/>
                         <outlet property="btnMultiply" destination="F5R-b0-4dA" id="bQc-GK-9UQ"/>

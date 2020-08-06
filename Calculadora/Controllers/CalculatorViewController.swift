@@ -16,7 +16,7 @@ enum Operation: String {
     case multiply = "*"
     case null = "Null"
     case percent = "%"
-    case plusMinus = "⁺/-"
+    case plusMinus = "⁺∕-"
     case AC = "C"
 }
 
@@ -34,17 +34,19 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var btnEquals: UIButton!
     @IBOutlet weak var btnPercent: UIButton!
     @IBOutlet weak var btnPlusMinus: UIButton!
+    @IBOutlet weak var btnAllClear: UIButton!
     
     var runningNumber = ""
     var leftValue = ""
     var rightValue = ""
-    var result = ""
+    var result = "0"
     var currentOperation:Operation =  .null
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         lblCount?.text = result
+        lblCount?.adjustsFontSizeToFitWidth = true
         
         if let placeholder = txtName?.placeholder {
             txtName?.attributedPlaceholder = NSAttributedString(string: placeholder,
@@ -143,6 +145,7 @@ class CalculatorViewController: UIViewController {
             lblCount?.text = runningNumber
             buttonsPressed()
         }
+            btnAllClear.setTitle("C", for: .normal)
     }
     
     @IBAction func allClearPressed(_ sender: UIButton) {
@@ -153,14 +156,16 @@ class CalculatorViewController: UIViewController {
         result = ""
         currentOperation = .null
         lblCount?.text = "0"
+        btnAllClear.setTitle("AC", for: .normal)
     }
     
     @IBAction func dotPressed(_ sender: UIButton) {
         
         if runningNumber.count <= 9 {
-        runningNumber += "."
-        lblCount?.text = runningNumber
+        runningNumber += ","
+            lblCount?.text = runningNumber
         }
+        // se o numero inicial for zero, o "." tem que estar a direita dele e nao sobreescrevelo
     }
     
     @IBAction func equalPressed(_ sender: UIButton) {
@@ -286,4 +291,38 @@ class CalculatorViewController: UIViewController {
             self.btnEquals?.setTitleColor(UIColor.white, for: UIControl.State.normal)
         }
     }
+    
+    @IBAction func plusMinusPressed(_ sender: UIButton) {
+        operation(operation: .plusMinus)
+        
+        
+    }
+    
+    @IBAction func percentPressed(_ sender: UIButton) {
+        operation(operation: .percent)
+        
+        
+    }
 }
+
+extension Formatter {
+    static let withSeparator: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = " "
+        return formatter
+    }()
+}
+
+extension Numeric {
+    var formattedWithSeparator: String { Formatter.withSeparator.string(for: self) ?? "" }
+}
+
+let int = 2358000
+let intFormatted = int.formattedWithSeparator  // "2 358 000"
+
+let decimal: Decimal = 2358000
+let decimalFormatted = decimal.formattedWithSeparator  // "2 358 000"
+
+let decimalWithFractionalDigits: Decimal = 2358000.99
+let decimalWithFractionalDigitsFormatted = decimalWithFractionalDigits.formattedWithSeparator // "2 358 000.99"
