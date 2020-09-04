@@ -22,6 +22,26 @@ class SavesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tbResults?.reloadData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+    }
+    
    // MARK: - TableViewController
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -35,7 +55,6 @@ class SavesViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let result: Result = numbersSaved[indexPath.row]
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ResultCell") as! NumbersCell
         cell.loadUI(item: result)
         
@@ -47,6 +66,7 @@ class SavesViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
         if (editingStyle == .delete) {
             numbersSaved.remove(at: indexPath.row)
             
@@ -65,7 +85,8 @@ class SavesViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             for item in results {
                 
-                let object = Result(name: item["name"] ?? "", result: item["result"] ?? "")
+                let object = Result(name: item["name"] ?? "",
+                                    result: item["result"] ?? "")
                 list.append(object)
             }
         }

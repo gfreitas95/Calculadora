@@ -22,9 +22,6 @@ enum Operation: String {
 
 class CalculatorViewController: UIViewController {
     
-    let defaults = UserDefaults.standard
-    let backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
-    
     @IBOutlet weak var txtName: UITextField!
     @IBOutlet weak var lblCount: UILabel!
     @IBOutlet weak var btnAdd: UIButton!
@@ -41,6 +38,8 @@ class CalculatorViewController: UIViewController {
     var rightValue = ""
     var result = "0"
     var currentOperation:Operation =  .null
+    let defaults = UserDefaults.standard
+    let backgroundColor = UIColor(red:1.00, green:0.62, blue:0.10, alpha:1.0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,7 +114,14 @@ class CalculatorViewController: UIViewController {
     
     @IBAction func saveCount() {
         
-        let savesViewController = storyboard?.instantiateViewController(identifier: "SavesView") as! SavesViewController
+        if #available(iOS 13.0, *) {
+            let savesViewController = storyboard?.instantiateViewController(identifier: "SavesView") as! SavesViewController
+            self.present(savesViewController, animated: true, completion: nil)
+        } else {
+            let storyboard = UIStoryboard(name: "SavesView", bundle: nil)
+            let storyboardVC = storyboard.instantiateViewController(withIdentifier: "SavesView")
+            self.present(storyboardVC, animated: true)
+        }
         
         let dictionary = ["name": txtName?.text ?? "", "result": lblCount?.text ?? ""]
         
@@ -128,14 +134,18 @@ class CalculatorViewController: UIViewController {
             UserDefaults.standard.set([dictionary], forKey: "results")
         }
         txtName?.text = ""
-        self.present(savesViewController, animated: true, completion: nil)
     }
     
     @IBAction func goToSavedCounts() {
         
-        let savesViewController = storyboard?.instantiateViewController(identifier: "SavesView") as! SavesViewController
-        
-        self.present(savesViewController, animated: true, completion: nil)
+        if #available(iOS 13.0, *) {
+            let savesViewController = storyboard?.instantiateViewController(identifier: "SavesView") as! SavesViewController
+            self.present(savesViewController, animated: true, completion: nil)
+        } else {
+            let storyboard = UIStoryboard(name: "SavesView", bundle: nil)
+            let storyboardVC = storyboard.instantiateViewController(withIdentifier: "SavesView")
+            self.present(storyboardVC, animated: true)
+        }
     }
     
     @IBAction func numberPressed(_ sender: UIButton) {
@@ -162,10 +172,9 @@ class CalculatorViewController: UIViewController {
     @IBAction func dotPressed(_ sender: UIButton) {
         
         if runningNumber.count <= 9 {
-        runningNumber += ","
+            runningNumber += ","
             lblCount?.text = runningNumber
         }
-        // se o numero inicial for zero, o "." tem que estar a direita dele e nao sobreescrevelo
     }
     
     @IBAction func equalPressed(_ sender: UIButton) {
@@ -293,36 +302,12 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func plusMinusPressed(_ sender: UIButton) {
-        operation(operation: .plusMinus)
         
-        
+        lblCount.text = "\(Int(runningNumber)! * -1)"
     }
     
     @IBAction func percentPressed(_ sender: UIButton) {
-        operation(operation: .percent)
         
-        
+        lblCount.text = "\(Double(runningNumber)! / 100)"
     }
 }
-
-extension Formatter {
-    static let withSeparator: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = " "
-        return formatter
-    }()
-}
-
-extension Numeric {
-    var formattedWithSeparator: String { Formatter.withSeparator.string(for: self) ?? "" }
-}
-
-let int = 2358000
-let intFormatted = int.formattedWithSeparator  // "2 358 000"
-
-let decimal: Decimal = 2358000
-let decimalFormatted = decimal.formattedWithSeparator  // "2 358 000"
-
-let decimalWithFractionalDigits: Decimal = 2358000.99
-let decimalWithFractionalDigitsFormatted = decimalWithFractionalDigits.formattedWithSeparator // "2 358 000.99"
