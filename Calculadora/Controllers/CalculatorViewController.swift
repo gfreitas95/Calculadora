@@ -53,6 +53,12 @@ class CalculatorViewController: UIViewController {
         }
     }
     
+    // MARK: - UITextFieldDelegate
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     func operation(operation: Operation) {
         
         if currentOperation != .null {

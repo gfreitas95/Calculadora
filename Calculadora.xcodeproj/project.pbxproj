@@ -43,6 +43,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EC6B27D72511291900B43BDC /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				ECE3FAF024D4DE600026A58D /* Main.storyboard */,
+				ECE3FAF524D4DE610026A58D /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
 		ECD6FB4224D4E21100C393D8 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
@@ -62,8 +71,8 @@
 		ECD6FB4424D4E22B00C393D8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				ECD6FB4A24D4E2D900C393D8 /* CalculatorViewController.swift */,
 				ECD6FB4C24D4E2F100C393D8 /* SavesViewController.swift */,
+				ECD6FB4A24D4E2D900C393D8 /* CalculatorViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -97,12 +106,11 @@
 			isa = PBXGroup;
 			children = (
 				ECD6FB4524D4E25F00C393D8 /* Delegates */,
+				EC6B27D72511291900B43BDC /* Storyboards */,
 				ECD6FB4224D4E21100C393D8 /* Entities */,
 				ECD6FB4324D4E22400C393D8 /* Cells */,
 				ECD6FB4424D4E22B00C393D8 /* Controllers */,
-				ECE3FAF024D4DE600026A58D /* Main.storyboard */,
 				ECE3FAF324D4DE610026A58D /* Assets.xcassets */,
-				ECE3FAF524D4DE610026A58D /* LaunchScreen.storyboard */,
 				ECE3FAF824D4DE610026A58D /* Info.plist */,
 			);
 			path = Calculadora;
